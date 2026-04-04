@@ -46,8 +46,7 @@ RUN pip install -r requirements.txt && chmod +x /work/start.sh
 ARG MODEL_NAMES
 ENV MODEL_NAMES=$MODEL_NAMES
 ADD ./embed_model/preload_model.sh /preload_model.sh
-RUN apt-get update && apt-get install -bash && \
-    chmod +x /preload_model.sh && /preload_model.sh
+RUN chmod +x /preload_model.sh && /preload_model.sh
 
 # Set the entrypoint
 ENTRYPOINT ["/bin/sh", "-c", "/work/start.sh"]
