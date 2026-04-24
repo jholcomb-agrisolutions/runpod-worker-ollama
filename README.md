@@ -1,5 +1,9 @@
 # Runpod serverless runner for ollama
 
+## Note!
+
+I have adjusted the Dockerfile to embed the model into the image.
+
 ## How to use
 
 Start a runpod serverless with the docker container ``svenbrnn/runpod-ollama:latest``. Set ``OLLAMA_MODEL_NAME`` environment to a model from ollama.com to automatically download a model.
