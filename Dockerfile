@@ -1,4 +1,4 @@
-ARG OLLAMA_VERSION=0.20.7
+ARG OLLAMA_VERSION=0.22.0
 
 # Use an official base${OLLAMA_VERSION} image with your desired version
 FROM ollama/ollama:${OLLAMA_VERSION}
@@ -46,5 +46,5 @@ RUN pip install -r requirements.txt && chmod +x /work/start.sh
 ENTRYPOINT ["/bin/sh", "-c", "/work/start.sh"]
 
 # Preload a model
-ENV MODEL_NAMES="gemma4:31b"
+ENV MODEL_NAMES="gemma4:e4b"
 RUN chmod +x /work/preload_model.sh && /work/preload_model.sh
