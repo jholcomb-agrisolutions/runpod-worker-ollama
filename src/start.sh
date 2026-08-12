@@ -39,4 +39,8 @@ else
     ollama pull $OLLAMA_MODEL_NAME
 fi
 
-python -u handler.py $1
+# Force the model to load and complete its warmup *before* RunPod maps traffic
+# (This acts exactly like a --no-warmup skip because it gets the penalty out of the way)
+curl -X POST http://localhost:11434/api/generate -d "{\"model\": \"$OLLAMA_MODEL_NAME\", \"prompt\": \"\", \"stream\": false}"
+
+python3 -u handler.py $1
