@@ -9,26 +9,23 @@ ENV PYTHONUNBUFFERED=1
 # Set up the working directory
 WORKDIR /
 
-RUN apt-get update --yes --quiet && DEBIAN_FRONTEND=noninteractive apt-get install --yes --quiet --no-install-recommends \
-    software-properties-common \
-    gpg-agent \
-    build-essential \
-    apt-utils \
-    && apt-get install --reinstall ca-certificates \
-    && add-apt-repository --yes ppa:deadsnakes/ppa && apt update --yes --quiet \
+RUN DEBIAN_FRONTEND=noninteractive apt-get update --yes --quiet \
     && DEBIAN_FRONTEND=noninteractive apt-get install --yes --quiet --no-install-recommends \
-    python3.11 \
-    python3.11-dev \
-    python3.11-distutils \
-    python3.11-lib2to3 \
-    python3.11-gdbm \
-    python3.11-tk \
-    bash \
-    curl \
-    && ln -s /usr/bin/python3.11 /usr/bin/python \
-    && curl -sS https://bootstrap.pypa.io/get-pip.py | python3.11 \
+        software-properties-common \
+        gpg-agent \
+        build-essential \
+        apt-utils \
+    && DEBIAN_FRONTEND=noninteractive apt-get install --reinstall --yes \
+        ca-certificates \
+    && DEBIAN_FRONTEND=noninteractive apt-get install --yes --quiet --no-install-recommends \
+        bash \
+        curl \
+        git \
+        python3-setuptools \
+        python3-pip \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
+
 
 # Set the working directory
 WORKDIR /work
@@ -40,11 +37,13 @@ ADD ./src /work
 ENV OLLAMA_MODELS="/runpod-volume"
 
 # Install runpod and its dependencies
-RUN pip install -r requirements.txt && chmod +x /work/start.sh
+RUN pip install --ignore-installed --break-system-packages --upgrade -r requirements.txt 
+RUN chmod +x /work/start.sh
     
 # Set the entrypoint
 ENTRYPOINT ["/bin/sh", "-c", "/work/start.sh"]
 
 # Preload a model
 ENV MODEL_NAMES="gemma4:31b-it-qat"
-RUN chmod +x /work/preload_model.sh && /work/preload_model.sh
+RUN chmod +x /work/preload_model.sh \
+    && /work/preload_model.sh
