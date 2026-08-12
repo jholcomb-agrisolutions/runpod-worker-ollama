@@ -46,5 +46,5 @@ RUN pip install -r requirements.txt && chmod +x /work/start.sh
 ENTRYPOINT ["/bin/sh", "-c", "/work/start.sh"]
 
 # Preload a model
-ENV MODEL_NAMES="gemma4:31b-it-qat"
+ENV MODEL_NAMES="nemotron-3.5-lightning:30b-a3b-q8_0"
 RUN chmod +x /work/preload_model.sh && /work/preload_model.sh
